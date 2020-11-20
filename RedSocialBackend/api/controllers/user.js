@@ -111,8 +111,27 @@ function loginUsers(req, res){
             message: "No se encontró el e-mail del usuario o la contraseña"
         })
     }
+}
 
+function getUser(req, res){
+    let userId = req.params.id;
 
+    User.findById(userId, (err, user) =>{
+        if(err){
+            return res.status(500).send({
+                message: 'Hubo error en la petición'
+            })
+        }
+
+        if(!user){
+            return res.status(200).send({
+                message: 'Usuario no encontrado'
+            })
+        }
+
+        return res.status(200).send({user})
+
+    })
 
 }
 
@@ -120,5 +139,6 @@ module.exports = {
     home,
     pruebas,
     saveUser,
-    loginUsers
+    loginUsers,
+    getUser
 }

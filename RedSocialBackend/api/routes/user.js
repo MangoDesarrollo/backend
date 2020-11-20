@@ -11,5 +11,7 @@ api.get('/home', UserController.home);
 api.get('/pruebas', mid_auth.validateAuth, UserController.pruebas);
 api.post('/register', UserController.saveUser);
 api.post('/login', UserController.loginUsers);
+// Traer información de los usuarios
+api.get('/user/:id', mid_auth.validateAuth, UserController.getUser);
 
 module.exports = api;
