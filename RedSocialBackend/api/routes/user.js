@@ -13,5 +13,5 @@ api.post('/register', UserController.saveUser);
 api.post('/login', UserController.loginUsers);
 // Traer información de los usuarios
 api.get('/user/:id', mid_auth.validateAuth, UserController.getUser);
-
+api.get('/users/:page?', mid_auth.validateAuth, UserController.getUsers);
 module.exports = api;

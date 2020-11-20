@@ -4,6 +4,7 @@ let bcrypt = require('bcrypt-node');
 const {param} = require('../app');
 let User = require('../models/user');
 let jwt = require('../services/jwt');
+let mongoosePaginate = require('mongoose-pagination');
 
 function home(req, res){
     res.status(200).send(
@@ -132,13 +133,44 @@ function getUser(req, res){
         return res.status(200).send({user})
 
     })
-
 }
+
+function getUsers(req, res){
+    let page = 1;
+
+    if(req.params.page){
+        page = req.params.page
+    }
+
+    let docsPerPage = 5;
+
+    User.find().sort('_id').paginate(page, docsPerPage, (err, users, total) => {
+        if(err){
+            return res.status(500).send({
+                message: 'Hubo un error consultando los usuarios'
+            })
+        }
+
+        if(!users) return res.status(200).send({
+            message: "No hay usuarios para mostrar"
+        })
+
+        return res.status(200).send({
+            users,
+            total,
+            pages: Math.ceil(total/docsPerPage)
+        })
+
+    })
+}
+
+// Modificación de los datos del usuario
 
 module.exports = {
     home,
     pruebas,
     saveUser,
     loginUsers,
-    getUser
+    getUser,
+    getUsers
 }
